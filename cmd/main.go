@@ -1,5 +1,7 @@
 package main
 
-func main() {
+import "mall/conf"
 
+func main() {
+	conf.Init()
 }
