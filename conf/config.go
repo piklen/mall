@@ -52,30 +52,30 @@ func Init() {
 }
 func LoadingServer(file *ini.File) {
 	AppMode = file.Section("service").Key("AppMode").String()
-	AppMode = file.Section("service").Key("HttpPort").String()
+	HttpPort = file.Section("service").Key("HttpPort").String()
 }
 func LoadingMySql(file *ini.File) {
-	AppMode = file.Section("mysql").Key("DB").String()
-	AppMode = file.Section("mysql").Key("DbHost").String()
-	AppMode = file.Section("mysql").Key("DbPort").String()
-	AppMode = file.Section("mysql").Key("DbUser").String()
-	AppMode = file.Section("mysql").Key("DbPassword").String()
-	AppMode = file.Section("mysql").Key("DbName").String()
+	DB = file.Section("mysql").Key("DB").String()
+	DbHost = file.Section("mysql").Key("DbHost").String()
+	DbPort = file.Section("mysql").Key("DbPort").String()
+	DbUser = file.Section("mysql").Key("DbUser").String()
+	DbPassword = file.Section("mysql").Key("DbPassword").String()
+	DbName = file.Section("mysql").Key("DbName").String()
 }
 func LoadingRedis(file *ini.File) {
-	AppMode = file.Section("redis").Key("RedisDb").String()
-	AppMode = file.Section("redis").Key("RedisAddr").String()
-	AppMode = file.Section("redis").Key("RedisPw").String()
-	AppMode = file.Section("redis").Key("RedisDbName").String()
+	RedisDb = file.Section("redis").Key("RedisDb").String()
+	RedisAddr = file.Section("redis").Key("RedisAddr").String()
+	RedisPw = file.Section("redis").Key("RedisPw").String()
+	RedisDbName = file.Section("redis").Key("RedisDbName").String()
 }
 func LoadingEmail(file *ini.File) {
-	AppMode = file.Section("email").Key("ValidEmail").String()
-	AppMode = file.Section("email").Key("SmtpHost").String()
-	AppMode = file.Section("email").Key("SmtpEmail").String()
-	AppMode = file.Section("email").Key("SmtpPass").String()
+	ValidEmail = file.Section("email").Key("ValidEmail").String()
+	SmtpHost = file.Section("email").Key("SmtpHost").String()
+	SmtpEmail = file.Section("email").Key("SmtpEmail").String()
+	SmtpPass = file.Section("email").Key("SmtpPass").String()
 }
 func LoadingPhotoPath(file *ini.File) {
-	AppMode = file.Section("path").Key("Host").String()
-	AppMode = file.Section("path").Key("ProductPath").String()
-	AppMode = file.Section("path").Key("AvatarPath").String()
+	Host = file.Section("path").Key("Host").String()
+	ProductPath = file.Section("path").Key("ProductPath").String()
+	AvatarPath = file.Section("path").Key("AvatarPath").String()
 }

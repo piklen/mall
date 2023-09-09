@@ -50,6 +50,7 @@ func Database(connRed, connWrite string) {
 			Policy:   dbresolver.RandomPolicy{},
 		}))
 	migration()
+
 }
 func NewDBClient(ctx context.Context) *gorm.DB {
 	db := _db
