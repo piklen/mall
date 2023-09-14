@@ -1,6 +1,7 @@
 package v
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/pkg/util"
 	"mall/service"
@@ -32,6 +33,21 @@ func UserUpdate(c *gin.Context) {
 	claims, _ := util.ParseToken(c.GetHeader("Authorization"))
 	if err := c.ShouldBind(&userUpdateService); err == nil {
 		res := userUpdateService.Update(c.Request.Context(), claims.ID)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, err)
+	}
+}
+
+// UploadAvatar 上传头像
+func UploadAvatar(c *gin.Context) {
+	file, fileHeader, _ := c.Request.FormFile("file")
+	fileSize := fileHeader.Size
+	fmt.Println("测试.........")
+	uploadAvatarService := service.UserService{}
+	chaim, _ := util.ParseToken(c.GetHeader("Authorization"))
+	if err := c.ShouldBind(&uploadAvatarService); err == nil {
+		res := uploadAvatarService.Post(c.Request.Context(), chaim.ID, file, fileSize)
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, err)
