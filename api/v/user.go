@@ -14,7 +14,8 @@ func UserRegister(c *gin.Context) {
 		res := userRegister.Register(c.Request.Context())
 		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(http.StatusBadRequest, err) //绑定不成功返回错误
+		c.JSON(http.StatusBadRequest, ErrorResponse(err)) //绑定不成功返回错误
+		util.LogrusObj.Infoln(err)
 	}
 }
 
@@ -25,7 +26,8 @@ func UserLogin(c *gin.Context) {
 		res := userLogin.Login(c.Request.Context())
 		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		util.LogrusObj.Infoln(err)
 	}
 }
 func UserUpdate(c *gin.Context) {
@@ -35,7 +37,8 @@ func UserUpdate(c *gin.Context) {
 		res := userUpdateService.Update(c.Request.Context(), claims.ID)
 		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		util.LogrusObj.Infoln(err)
 	}
 }
 
@@ -50,7 +53,42 @@ func UploadAvatar(c *gin.Context) {
 		res := uploadAvatarService.Post(c.Request.Context(), chaim.ID, file, fileSize)
 		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		util.LogrusObj.Infoln(err)
+	}
+}
+
+// SendEmail 发送邮件
+func SendEmail(c *gin.Context) {
+	var sendEmailService service.SendEmailService
+	chaim, _ := util.ParseToken(c.GetHeader("Authorization"))
+	if err := c.ShouldBind(&sendEmailService); err == nil {
+		res := sendEmailService.Send(c.Request.Context(), chaim.ID)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		util.LogrusObj.Infoln(err)
+	}
+}
+func ValidEmail(c *gin.Context) {
+	var validEmailService service.ValidEmailService
+	if err := c.ShouldBind(validEmailService); err == nil {
+		res := validEmailService.Valid(c.Request.Context(), c.GetHeader("Authorization"))
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		util.LogrusObj.Infoln(err)
+	}
+}
+func ShowMoney(c *gin.Context) {
+	showMoneyService := service.ShowMoneyService{}
+	claim, _ := util.ParseToken(c.GetHeader("Authorization"))
+	if err := c.ShouldBind(&showMoneyService); err == nil {
+		res := showMoneyService.Show(c.Request.Context(), claim.ID)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		util.LogrusObj.Infoln(err)
 	}
 }
 

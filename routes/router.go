@@ -23,17 +23,28 @@ func NewRouter() *gin.Engine {
 		// 用户操作
 		v.POST("user/register", api.UserRegister)
 		v.POST("user/login", api.UserLogin)
+
+		//轮播图
+		v.GET("carousels", api.ListCarousels)
+		v.GET("GetProductView", api.GetProductView)
+		v.POST("AddProductView", api.AddProductView)
 		authed := v.Group("/") //需要登录保护
 		authed.Use(middleware.JWT())
 		{
 			// 用户操作
-			authed.PUT("user", api.UserUpdate)
-			authed.POST("avatar", api.UploadAvatar) // 上传头像
+			authed.PUT("user", api.UserUpdate)               //更新昵称
+			authed.POST("avatar", api.UploadAvatar)          // 上传头像
+			authed.POST("user/sending-email", api.SendEmail) //发送邮件
+			authed.POST("user/valid-email", api.ValidEmail)  //邮箱变更修改绑定等
+			// 显示金额
+			authed.POST("money", api.ShowMoney)
 
+			//商品操作
+			authed.POST("create", api.CreateProduct)
+			//fmt.Println("没有进入了Create Product...")
+			//authed.PUT("product/:id", api.UpdateProduct)
+			//authed.DELETE("product/:id", api.DeleteProduct)
 		}
-		//v.POST("user/register", api.UserRegisterHandler())
-		//v.POST("user/login", api.UserLogin)
-
 	}
 	return r
 }

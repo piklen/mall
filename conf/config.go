@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	AppMode  string
-	HttpPort string
+	AppMode     string
+	HttpPort    string
+	UploadModel string
 
 	DB         string
 	DbHost     string
@@ -30,6 +31,9 @@ var (
 	Host        string
 	ProductPath string
 	AvatarPath  string
+	PhotoHost   string
+
+	ProductPhotoPath string
 )
 
 func Init() {
@@ -53,6 +57,7 @@ func Init() {
 func LoadingServer(file *ini.File) {
 	AppMode = file.Section("service").Key("AppMode").String()
 	HttpPort = file.Section("service").Key("HttpPort").String()
+	UploadModel = file.Section("service").Key("UploadModel").String()
 }
 func LoadingMySql(file *ini.File) {
 	DB = file.Section("mysql").Key("DB").String()

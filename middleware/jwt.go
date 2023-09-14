@@ -14,7 +14,6 @@ func JWT() gin.HandlerFunc {
 		var code int
 		code = 200
 		token := c.GetHeader("Authorization")
-		fmt.Println("hello---------------")
 		fmt.Println(token)
 		if token == "" {
 			code = 404
