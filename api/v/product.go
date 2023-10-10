@@ -24,3 +24,15 @@ func CreateProduct(c *gin.Context) {
 		util.LogrusObj.Infoln(err)
 	}
 }
+
+// 商品列表
+func ListProducts(c *gin.Context) {
+	listProductsService := service.ProductService{}
+	if err := c.ShouldBind(&listProductsService); err == nil {
+		res := listProductsService.List(c.Request.Context())
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		util.LogrusObj.Infoln(err)
+	}
+}
