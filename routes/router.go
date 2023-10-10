@@ -28,6 +28,10 @@ func NewRouter() *gin.Engine {
 		v.GET("carousels", api.ListCarousels)
 		v.GET("GetProductView", api.GetProductView)
 		v.POST("AddProductView", api.AddProductView)
+
+		// 商品操作
+		v.GET("products", api.ListProducts)
+
 		authed := v.Group("/") //需要登录保护
 		authed.Use(middleware.JWT())
 		{

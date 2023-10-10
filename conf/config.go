@@ -83,4 +83,5 @@ func LoadingPhotoPath(file *ini.File) {
 	Host = file.Section("path").Key("Host").String()
 	ProductPath = file.Section("path").Key("ProductPath").String()
 	AvatarPath = file.Section("path").Key("AvatarPath").String()
+	PhotoHost = file.Section("path").Key("PhotoHost").String()
 }

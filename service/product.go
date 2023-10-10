@@ -141,6 +141,7 @@ func (service *ProductService) Create(ctx context.Context, uId uint, files []*mu
 	}
 }
 
+// List 商品列表
 func (service *ProductService) List(ctx context.Context) serializer.Response {
 	var products []*model.Product
 	var total int64
@@ -149,6 +150,7 @@ func (service *ProductService) List(ctx context.Context) serializer.Response {
 	if service.PageSize == 0 {
 		service.PageSize = 15
 	}
+	//找分类
 	condition := make(map[string]interface{})
 	if service.CategoryID != 0 {
 		condition["category_id"] = service.CategoryID
@@ -162,6 +164,7 @@ func (service *ProductService) List(ctx context.Context) serializer.Response {
 			Msg:    e.GetMsg(code),
 		}
 	}
+	//进行并发操作
 	wg := new(sync.WaitGroup)
 	wg.Add(1)
 	go func() {
