@@ -231,7 +231,7 @@ func (service *ProductService) Update(ctx context.Context, pId string) serialize
 	}
 }
 
-// Search 搜索商品
+// 搜索商品
 func (service *ProductService) Search(ctx context.Context) serializer.Response {
 	code := e.Success
 	if service.PageSize == 0 {

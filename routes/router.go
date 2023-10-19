@@ -30,9 +30,9 @@ func NewRouter() *gin.Engine {
 		v.POST("AddProductView", api.AddProductView)
 
 		// 商品操作
-		v.GET("products", api.ListProducts)    //获取商品列表
-		v.POST("products", api.SearchProducts) //搜索商品
-		authed := v.Group("/")                 //需要登录保护
+		v.GET("products", api.ListProducts)
+
+		authed := v.Group("/") //需要登录保护
 		authed.Use(middleware.JWT())
 		{
 			// 用户操作

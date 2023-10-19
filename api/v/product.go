@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// CreateProduct 创建商品
+// 创建商品
 func CreateProduct(c *gin.Context) {
 	fmt.Println("进入了Create Product...")
 	form, _ := c.MultipartForm()
@@ -25,19 +25,7 @@ func CreateProduct(c *gin.Context) {
 	}
 }
 
-// SearchProducts 搜索商品
-func SearchProducts(c *gin.Context) {
-	searchProductsService := service.ProductService{}
-	if err := c.ShouldBind(&searchProductsService); err == nil {
-		res := searchProductsService.Search(c.Request.Context())
-		c.JSON(http.StatusOK, res)
-	} else {
-		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
-	}
-}
-
-// ListProducts 商品列表
+// 商品列表
 func ListProducts(c *gin.Context) {
 	listProductsService := service.ProductService{}
 	if err := c.ShouldBind(&listProductsService); err == nil {
