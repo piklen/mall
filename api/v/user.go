@@ -19,6 +19,18 @@ func UserRegister(c *gin.Context) {
 	}
 }
 
+func BotchUserRegister(c *gin.Context) {
+	var userRegister service.BatchUsersService
+	if err := c.ShouldBind(&userRegister); err == nil {
+		res := userRegister.BatchRegister(c.Request.Context())
+		c.JSON(http.StatusOK, res)
+		//
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err)) //绑定不成功返回错误
+		util.LogrusObj.Infoln(err)
+	}
+}
+
 // UserLogin 用户登陆接口
 func UserLogin(c *gin.Context) {
 	var userLogin service.UserService

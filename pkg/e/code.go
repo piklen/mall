@@ -15,4 +15,10 @@ const (
 	ErrorSendEmail             = 30008
 	//product 模块错误
 	ErrorProductImgUpload = 40001
+	ErrorDatabase         = 40002
+
+	//成员错误
+	ErrorExistFavorite    = 10001
+	ErrorProductExistCart = 10002
+	ErrorProductMoreCart  = 10003
 )

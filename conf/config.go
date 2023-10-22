@@ -48,9 +48,9 @@ func Init() {
 	LoadingEmail(file)
 	LoadingPhotoPath(file)
 	//mysql读
-	pathRead := strings.Join([]string{DbUser, ":", DbPassword, "@tcp(", DbHost, ":", DbPort, ")/", DbName, "?charset=utf8mb4&parseTime=true"}, "")
+	pathRead := strings.Join([]string{DbUser, ":", DbPassword, "@tcp(", DbHost, ":", DbPort, ")/", DbName, "?charset=utf8mb4&parseTime=true&loc=Local"}, "")
 	//MySQL写
-	pathWrite := strings.Join([]string{DbUser, ":", DbPassword, "@tcp(", DbHost, ":", DbPort, ")/", DbName, "?charset=utf8mb4&parseTime=true"}, "")
+	pathWrite := strings.Join([]string{DbUser, ":", DbPassword, "@tcp(", DbHost, ":", DbPort, ")/", DbName, "?charset=utf8mb4&parseTime=true&loc=Local"}, "")
 	dao.Database(pathRead, pathWrite)
 
 }
@@ -82,6 +82,7 @@ func LoadingEmail(file *ini.File) {
 func LoadingPhotoPath(file *ini.File) {
 	Host = file.Section("path").Key("Host").String()
 	ProductPath = file.Section("path").Key("ProductPath").String()
+	ProductPhotoPath = file.Section("path").Key("ProductPath").String()
 	AvatarPath = file.Section("path").Key("AvatarPath").String()
 	PhotoHost = file.Section("path").Key("PhotoHost").String()
 }
