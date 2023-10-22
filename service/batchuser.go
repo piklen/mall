@@ -5,6 +5,7 @@ import (
 	"mall/dao"
 	"mall/model"
 	"mall/pkg/e"
+	"mall/pkg/util"
 	"mall/serializer"
 )
 
@@ -19,42 +20,43 @@ type BatchUserService struct {
 }
 
 func (service BatchUsersService) BatchRegister(ctx context.Context) serializer.Response {
-	var user []model.BatchUser
+	//var user []model.BatchUser
 	var users = service.Users
 	code := e.Success
 	//先进行批处理用户名唯一性校验
+	user := make([]model.BatchUser, len(users))
 	userNames := make([]string, len(users))
 	for i, v := range users {
 		userNames[i] = v.UserName
-		//	//进行校验密码
-		//	if service[i].Key == "" || len(service[i].Key) != 16 {
-		//		code = e.Error
-		//		return serializer.Response{
-		//			Status: code,
-		//			Msg:    e.GetMsg(code),
-		//			Data:   "密钥长度不足",
-		//		}
-		//	}
-		//
-		//	//10000  ----->密文存储,对称加密操作
-		//	util.Encrypt.SetKey(service[i].Key)
-		//	user[i] = model.BatchUser{
-		//		UserName: service[i].UserName,
-		//		NickName: service[i].NickName,
-		//		Status:   model.BatchActive,
-		//		Avatar:   "avatar.jpeg",
-		//		Money:    util.Encrypt.AesEncoding("10000"), // 初始金额
-		//	}
-		//
-		//	// 加密密码
-		//	//前端传入的是明文
-		//	if err := user[i].BatchSetPassword(service[i].Password); err != nil {
-		//		code = e.ErrorFailEncryption
-		//		return serializer.Response{
-		//			Status: code,
-		//			Msg:    e.GetMsg(code),
-		//		}
-		//	}
+		//进行校验密码
+		if v.Key == "" || len(v.Key) != 16 {
+			code = e.Error
+			return serializer.Response{
+				Status: code,
+				Msg:    e.GetMsg(code),
+				Data:   "密钥长度不足",
+			}
+		}
+
+		//10000  ----->密文存储,对称加密操作
+		util.Encrypt.SetKey(v.Key)
+		user[i] = model.BatchUser{
+			UserName: v.UserName,
+			NickName: v.NickName,
+			Status:   model.BatchActive,
+			Avatar:   "avatar.jpeg",
+			Money:    util.Encrypt.AesEncoding("10000"), // 初始金额
+		}
+
+		// 加密密码
+		//前端传入的是明文
+		if err := user[i].BatchSetPassword(v.Password); err != nil {
+			code = e.ErrorFailEncryption
+			return serializer.Response{
+				Status: code,
+				Msg:    e.GetMsg(code),
+			}
+		}
 	}
 	userDao := dao.BatchNewUserDao(ctx)
 	_, exist, err := userDao.BatchExistOrNotByUserNames(userNames)
