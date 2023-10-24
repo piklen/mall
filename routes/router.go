@@ -22,6 +22,7 @@ func NewRouter() *gin.Engine {
 		})
 		// 用户操作
 		v.POST("user/register", api.UserRegister)
+		v.POST("user/batchRegister", api.BotchUserRegister)
 		v.POST("user/login", api.UserLogin)
 
 		//轮播图
@@ -31,8 +32,11 @@ func NewRouter() *gin.Engine {
 
 		// 商品操作
 		v.GET("products", api.ListProducts)
-
-		authed := v.Group("/") //需要登录保护
+		v.POST("products/search", api.SearchProducts)
+		v.GET("product/show/", api.ShowProduct)         //展示商品信息
+		v.GET("products/imgs/", api.ListProductImg)     // 商品图片
+		v.GET("product/categories", api.ListCategories) //商品分类
+		authed := v.Group("/")                          //需要登录保护
 		authed.Use(middleware.JWT())
 		{
 			// 用户操作
@@ -45,9 +49,24 @@ func NewRouter() *gin.Engine {
 
 			//商品操作
 			authed.POST("create", api.CreateProduct)
-			//fmt.Println("没有进入了Create Product...")
-			//authed.PUT("product/:id", api.UpdateProduct)
-			//authed.DELETE("product/:id", api.DeleteProduct)
+			//收藏夹操作
+			authed.POST("favorites", api.CreateFavorite)
+			authed.GET("favorites/show", api.ShowFavorites)
+			authed.POST("favorites/", api.DeleteFavorite)
+
+			// 收获地址操作
+			authed.POST("addresses/create", api.CreateAddress)
+			authed.GET("addresses/get", api.GetAddress)
+			authed.GET("addresses/list", api.ListAddress) //展示全部地址
+			authed.POST("addresses/update", api.UpdateAddress)
+			authed.POST("addresses/del", api.DeleteAddress)
+
+			// 购物车
+			authed.POST("carts/create", api.CreateCart)
+			authed.GET("carts/show", api.ShowCarts)
+			authed.POST("carts/update", api.UpdateCart) //修改的主要是数量
+			authed.POST("carts/del", api.DeleteCart)
+
 		}
 	}
 	return r

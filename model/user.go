@@ -37,3 +37,13 @@ func (user *User) CheckPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
 	return err == nil
 }
+
+// SetPassword 设置密码
+func (user *User) BatchSetPassword(password string) error {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), BatchPassWordCost)
+	if err != nil {
+		return err
+	}
+	user.PasswordDigest = string(bytes)
+	return nil
+}

@@ -36,3 +36,22 @@ func ListProducts(c *gin.Context) {
 		util.LogrusObj.Infoln(err)
 	}
 }
+
+// 搜索商品
+func SearchProducts(c *gin.Context) {
+	searchProductsService := service.ProductService{}
+	if err := c.ShouldBind(&searchProductsService); err == nil {
+		res := searchProductsService.Search(c.Request.Context())
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		util.LogrusObj.Infoln(err)
+	}
+}
+
+// 商品详情
+func ShowProduct(c *gin.Context) {
+	showProductService := service.ProductService{}
+	res := showProductService.Show(c.Request.Context(), c.Query("id"))
+	c.JSON(http.StatusOK, res)
+}
