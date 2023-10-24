@@ -24,7 +24,7 @@ func (service BatchUsersService) BatchRegister(ctx context.Context) serializer.R
 	var users = service.Users
 	code := e.Success
 	//先进行批处理用户名唯一性校验
-	user := make([]model.BatchUser, len(users))
+	user := make([]model.User, len(users))
 	userNames := make([]string, len(users))
 	for i, v := range users {
 		userNames[i] = v.UserName
@@ -40,7 +40,7 @@ func (service BatchUsersService) BatchRegister(ctx context.Context) serializer.R
 
 		//10000  ----->密文存储,对称加密操作
 		util.Encrypt.SetKey(v.Key)
-		user[i] = model.BatchUser{
+		user[i] = model.User{
 			UserName: v.UserName,
 			NickName: v.NickName,
 			Status:   model.BatchActive,
@@ -58,7 +58,7 @@ func (service BatchUsersService) BatchRegister(ctx context.Context) serializer.R
 			}
 		}
 	}
-	userDao := dao.BatchNewUserDao(ctx)
+	userDao := dao.NewUserDao(ctx)
 	_, exist, err := userDao.BatchExistOrNotByUserNames(userNames)
 	if err != nil {
 		code = e.Error

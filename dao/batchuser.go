@@ -23,7 +23,7 @@ func (dao *BatchUserDao) BatchExistOrNotByUserNames(userNames []string) ([]*mode
 	var users []*model.BatchUser
 	var exists bool
 
-	err := dao.DB.Model(&model.BatchUser{}).
+	err := dao.DB.Model(&model.User{}).
 		Where("user_name IN (?)", userNames).
 		Find(&users).Error
 
@@ -47,5 +47,6 @@ func (dao *BatchUserDao) BatchCreateUsers(users *[]model.BatchUser) error {
 	if len(*users) == 0 {
 		return nil
 	}
-	return dao.DB.Create(&users).Error
+	return dao.DB.Model(&model.User{}).Create(&users).Error
+	//return dao.DB.Create(&users).Error
 }
