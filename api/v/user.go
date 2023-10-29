@@ -3,6 +3,7 @@ package v
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"mall/pkg/log"
 	"mall/pkg/util"
 	"mall/service"
 	"net/http"
@@ -15,7 +16,7 @@ func UserRegister(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err)) //绑定不成功返回错误
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 
@@ -27,7 +28,7 @@ func BotchUserRegister(c *gin.Context) {
 		//
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err)) //绑定不成功返回错误
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 
@@ -39,7 +40,7 @@ func UserLogin(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 func UserUpdate(c *gin.Context) {
@@ -50,7 +51,7 @@ func UserUpdate(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 
@@ -66,7 +67,7 @@ func UploadAvatar(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 
@@ -79,7 +80,7 @@ func SendEmail(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 func ValidEmail(c *gin.Context) {
@@ -89,7 +90,7 @@ func ValidEmail(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 func ShowMoney(c *gin.Context) {
@@ -100,7 +101,7 @@ func ShowMoney(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 

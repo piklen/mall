@@ -3,6 +3,7 @@ package v
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"mall/pkg/log"
 	"mall/pkg/util"
 	"mall/service"
 	"net/http"
@@ -16,7 +17,7 @@ func CreateFavorite(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 func ShowFavorites(c *gin.Context) {
@@ -28,7 +29,7 @@ func ShowFavorites(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 func DeleteFavorite(c *gin.Context) {
@@ -38,6 +39,6 @@ func DeleteFavorite(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }

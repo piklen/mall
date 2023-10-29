@@ -1,7 +1,7 @@
 package v
 
 import (
-	"mall/pkg/util"
+	"mall/pkg/log"
 	"mall/service"
 	"net/http"
 
@@ -15,6 +15,6 @@ func ListCategories(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
