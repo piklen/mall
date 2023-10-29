@@ -3,6 +3,7 @@ package v
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"mall/pkg/log"
 	"mall/pkg/util"
 	"mall/service"
 	"net/http"
@@ -21,7 +22,7 @@ func CreateProduct(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 
@@ -33,7 +34,7 @@ func ListProducts(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 
@@ -45,7 +46,7 @@ func SearchProducts(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 

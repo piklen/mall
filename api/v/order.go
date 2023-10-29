@@ -2,6 +2,7 @@ package v
 
 import (
 	"github.com/gin-gonic/gin"
+	"mall/pkg/log"
 	"mall/pkg/util"
 	"mall/service"
 	"net/http"
@@ -15,7 +16,7 @@ func CreateOrder(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 func ListOrders(c *gin.Context) {
@@ -26,7 +27,7 @@ func ListOrders(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 
@@ -38,7 +39,7 @@ func ShowOrder(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }
 func DeleteOrder(c *gin.Context) {
@@ -48,6 +49,6 @@ func DeleteOrder(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
-		util.LogrusObj.Infoln(err)
+		log.LogrusObj.Infoln(err)
 	}
 }

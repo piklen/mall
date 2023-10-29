@@ -27,14 +27,15 @@ type OrderPay struct {
 	Key       string  `form:"key" json:"key"`
 }
 
-func (service *OrderPay) PayDown(ctx context.Context, uId uint) serializer.Response {
+func (o *OrderPay) PayDown(ctx context.Context, uId uint) serializer.Response {
 	code := e.Success
-
+	//创建一个订单数据访问对象，并使用Transaction方法开始一个数据库事务。ctx是传入的上下文对象。
 	err := dao.NewOrderDao(ctx).Transaction(func(tx *gorm.DB) error {
-		util.Encrypt.SetKey(service.Key)
+		//设置加密密钥
+		util.Encrypt.SetKey(o.Key)
 		orderDao := dao.NewOrderByDB(tx)
-
-		order, err := orderDao.GetOrderById(service.OrderId)
+		//获取订单总金额，
+		order, err := orderDao.GetOrderById(o.OrderId)
 		if err != nil {
 			logging.Info(err)
 			return err
@@ -62,35 +63,37 @@ func (service *OrderPay) PayDown(ctx context.Context, uId uint) serializer.Respo
 
 		finMoney := fmt.Sprintf("%f", moneyFloat-money)
 		user.Money = util.Encrypt.AesEncoding(finMoney)
-
+		//更新用户金额
 		err = userDao.UpdateUserById(uId, user)
 		if err != nil { // 更新用户金额失败，回滚
 			logging.Info(err)
 			code = e.ErrorDatabase
 			return err
 		}
+
+		//更新boss金币数量
 		boss := new(model.User)
-		boss, err = userDao.GetUserById(uint(service.BossID))
+		boss, err = userDao.GetUserById(uint(o.BossID))
 		moneyStr = util.Encrypt.AesDecoding(boss.Money)
 		moneyFloat, _ = strconv.ParseFloat(moneyStr, 64)
 		finMoney = fmt.Sprintf("%f", moneyFloat+money)
 		boss.Money = util.Encrypt.AesEncoding(finMoney)
 
-		err = userDao.UpdateUserById(uint(service.BossID), boss)
+		err = userDao.UpdateUserById(uint(o.BossID), boss)
 		if err != nil { // 更新boss金额失败，回滚
 			logging.Info(err)
 			code = e.ErrorDatabase
 			return err
 		}
-
+		//更新商品数量
 		product := new(model.Product)
 		productDao := dao.NewProductDaoByDB(tx)
-		product, err = productDao.GetProductById(uint(service.ProductID))
+		product, err = productDao.GetProductById(uint(o.ProductID))
 		if err != nil {
 			return err
 		}
 		product.Num -= num
-		err = productDao.UpdateProduct(uint(service.ProductID), product)
+		err = productDao.UpdateProduct(uint(o.ProductID), product)
 		if err != nil { // 更新商品数量减少失败，回滚
 			logging.Info(err)
 			code = e.ErrorDatabase
@@ -99,7 +102,7 @@ func (service *OrderPay) PayDown(ctx context.Context, uId uint) serializer.Respo
 
 		// 更新订单状态
 		order.Type = 2
-		err = orderDao.UpdateOrderById(service.OrderId, order)
+		err = orderDao.UpdateOrderById(o.OrderId, order)
 		if err != nil { // 更新订单失败，回滚
 			logging.Info(err)
 			code = e.ErrorDatabase
