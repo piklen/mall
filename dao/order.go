@@ -35,8 +35,7 @@ func (dao *OrderDao) ListOrderByCondition(condition map[string]interface{}, page
 	return
 }
 func (dao *OrderDao) GetOrderById(id uint) (order *model.Order, err error) {
-	//使用Find比First更合理
-	err = dao.DB.Model(&model.Order{}).Where("id=?", id).Find(&order).Error
+	err = dao.DB.Model(&model.Order{}).Where("id=?", id).First(&order).Error
 	return
 }
 

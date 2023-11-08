@@ -19,7 +19,9 @@ func migration() {
 			&model.Cart{},
 			&model.Admin{},
 			&model.Carousel{},
-			&model.BatchUser{})
+			&model.BatchUser{},
+			&model.SeckillGood2MQ{},
+			&model.SeckillGoods{})
 	if err != nil {
 		fmt.Println("err", err)
 	}

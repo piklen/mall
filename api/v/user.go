@@ -25,7 +25,6 @@ func BotchUserRegister(c *gin.Context) {
 	if err := c.ShouldBind(&userRegister); err == nil {
 		res := userRegister.BatchRegister(c.Request.Context())
 		c.JSON(http.StatusOK, res)
-		//
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err)) //绑定不成功返回错误
 		log.LogrusObj.Infoln(err)

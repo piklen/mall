@@ -34,7 +34,7 @@ func UploadAvatarToLocalStatic(file multipart.File, userId uint, userName string
 	if !DirExistOrNot(basePath) {
 		CreateDir(basePath)
 	}
-	avatarPath := basePath + userName + ".jpg" //todo:把 file 的后缀提取出来
+	avatarPath := basePath + userName + ".jpg"
 	content, err := ioutil.ReadAll(file)
 	if err != nil {
 		return "", err

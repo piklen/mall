@@ -10,16 +10,16 @@ import (
 // 路由配置
 func NewRouter() *gin.Engine {
 	r := gin.Default()
-
+	r.GET("ping", func(ctx *gin.Context) {
+		ctx.JSON(200, "success")
+	})
 	r.Use(middleware.Cors())
 
 	r.StaticFS("/static", http.Dir("./static"))
 
 	v := r.Group("api/v")
 	{
-		v.GET("ping", func(ctx *gin.Context) {
-			ctx.JSON(200, "success")
-		})
+
 		// 用户操作
 		v.POST("user/register", api.UserRegister)
 		v.POST("user/batchRegister", api.BotchUserRegister)
@@ -75,6 +75,11 @@ func NewRouter() *gin.Engine {
 
 			//支付操作
 			authed.POST("pay", api.OrderPay)
+
+			//秒杀专场
+			authed.POST("import_skill_goods", api.ImportSkillGoods) //导入商品内容进去MySQL
+			authed.POST("init_skill_goods", api.InitSkillGoods)
+			authed.POST("skill_goods", api.SkillGoods)
 		}
 	}
 	return r
