@@ -52,7 +52,7 @@ func (dao *CartDao) CreateCart(pId, uId, bId uint) (cart *model.Cart, status int
 	}
 }
 
-// GetCartById 获取 Cart 通过 Id
+// GetCartById 获取 Cart 通过 id
 func (dao *CartDao) GetCartById(pId, uId, bId uint) (cart *model.Cart, err error) {
 	err = dao.DB.Model(&model.Cart{}).
 		Where("user_id=? AND product_id=? AND boss_id=?", uId, pId, bId).

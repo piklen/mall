@@ -1,7 +1,7 @@
 package service
 
 import (
-	"io/ioutil"
+	"io"
 	"mall/conf"
 	"mime/multipart"
 	"os"
@@ -16,11 +16,11 @@ func UploadProductToLocalStatic(file multipart.File, bossId uint, productName st
 		CreateDir(basePath)
 	}
 	productPath := basePath + productName + ".jpg"
-	content, err := ioutil.ReadAll(file)
+	content, err := io.ReadAll(file)
 	if err != nil {
 		return "", err
 	}
-	err = ioutil.WriteFile(productPath, content, 0666)
+	err = os.WriteFile(productPath, content, 0666)
 	if err != nil {
 		return "", err
 	}
@@ -34,12 +34,12 @@ func UploadAvatarToLocalStatic(file multipart.File, userId uint, userName string
 	if !DirExistOrNot(basePath) {
 		CreateDir(basePath)
 	}
-	avatarPath := basePath + userName + ".jpg" //todo:把 file 的后缀提取出来
-	content, err := ioutil.ReadAll(file)
+	avatarPath := basePath + userName + ".jpg"
+	content, err := io.ReadAll(file)
 	if err != nil {
 		return "", err
 	}
-	err = ioutil.WriteFile(avatarPath, content, 0666)
+	err = os.WriteFile(avatarPath, content, 0666)
 	if err != nil {
 		return "", err
 	}

@@ -9,7 +9,7 @@ type Carousel struct {
 	CreatedAt int64  `json:"created_at"`
 }
 
-// 序列化轮播图
+// BuildCarousel 序列化轮播图
 func BuildCarousel(item *model.Carousel) Carousel {
 	return Carousel{
 		ID:        item.ID,
@@ -19,7 +19,7 @@ func BuildCarousel(item *model.Carousel) Carousel {
 	}
 }
 
-// 序列化轮播图列表
+// BuildCarousels 序列化轮播图列表
 func BuildCarousels(items []*model.Carousel) (carousels []Carousel) {
 	for _, item := range items {
 		carousel := BuildCarousel(item)

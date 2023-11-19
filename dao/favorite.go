@@ -2,7 +2,6 @@ package dao
 
 import (
 	"context"
-	"fmt"
 	"gorm.io/gorm"
 	"mall/model"
 )
@@ -41,8 +40,6 @@ func (dao *FavoritesDao) ListFavoriteByUserId(uId uint, pageSize, pageNum int) (
 	if err != nil {
 		return
 	}
-	//进行分页
-
 	err = dao.DB.Model(model.Favorite{}).Preload("User").Where("user_id=?", uId).
 		Offset((pageNum - 1) * pageSize).
 		Limit(pageSize).Find(&favorites).Error
@@ -51,6 +48,5 @@ func (dao *FavoritesDao) ListFavoriteByUserId(uId uint, pageSize, pageNum int) (
 
 // DeleteFavoriteById 删除收藏夹
 func (dao *FavoritesDao) DeleteFavoriteById(fId uint) error {
-	fmt.Println("%d", fId)
 	return dao.DB.Where("id=?", fId).Delete(&model.Favorite{}).Error
 }

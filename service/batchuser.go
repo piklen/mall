@@ -20,7 +20,6 @@ type BatchUserService struct {
 }
 
 func (service BatchUsersService) BatchRegister(ctx context.Context) serializer.Response {
-	//var user []model.BatchUser
 	var users = service.Users
 	code := e.Success
 	//先进行批处理用户名唯一性校验
@@ -34,7 +33,7 @@ func (service BatchUsersService) BatchRegister(ctx context.Context) serializer.R
 			return serializer.Response{
 				Status: code,
 				Msg:    e.GetMsg(code),
-				Data:   "密钥长度不足",
+				Data:   "密钥长度不足！！！",
 			}
 		}
 
@@ -64,14 +63,14 @@ func (service BatchUsersService) BatchRegister(ctx context.Context) serializer.R
 		code = e.Error
 		return serializer.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    "批量注册失败！！！",
 		}
 	}
 	if exist {
 		code = e.ErrorExistUser
 		return serializer.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    "批量注册成功！！！！",
 		}
 	}
 

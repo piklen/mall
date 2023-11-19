@@ -109,7 +109,6 @@ func (service *FavoritesService) Show(ctx context.Context, uId uint) serializer.
 // Delete 删除收藏夹
 func (service *FavoritesService) Delete(ctx context.Context) serializer.Response {
 	code := e.Success
-
 	favoriteDao := dao.NewFavoritesDao(ctx)
 	err := favoriteDao.DeleteFavoriteById(service.FavoriteId)
 	if err != nil {
@@ -121,7 +120,6 @@ func (service *FavoritesService) Delete(ctx context.Context) serializer.Response
 			Error:  err.Error(),
 		}
 	}
-
 	return serializer.Response{
 		Status: code,
 		Data:   e.GetMsg(code),

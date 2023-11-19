@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	logging "github.com/sirupsen/logrus"
 	"mall/dao"
 	"mall/model"
@@ -31,12 +30,9 @@ type ProductService struct {
 type ListProductImgService struct {
 }
 
-// 商品
 func (service *ProductService) Show(ctx context.Context, id string) serializer.Response {
 	code := e.Success
-
 	pId, _ := strconv.Atoi(id)
-
 	productDao := dao.NewProductDao(ctx)
 	product, err := productDao.GetProductById(uint(pId))
 	if err != nil {
@@ -48,7 +44,6 @@ func (service *ProductService) Show(ctx context.Context, id string) serializer.R
 			Error:  err.Error(),
 		}
 	}
-
 	return serializer.Response{
 		Status: code,
 		Data:   serializer.BuildProduct(product),
@@ -56,12 +51,11 @@ func (service *ProductService) Show(ctx context.Context, id string) serializer.R
 	}
 }
 
-// 创建商品
+// Create 创建商品
 func (service *ProductService) Create(ctx context.Context, uId uint, files []*multipart.FileHeader) serializer.Response {
 	var boss *model.User
 	var err error
 	code := e.Success
-	fmt.Println("进入了func Create Product...")
 	userDao := dao.NewUserDao(ctx)
 	boss, _ = userDao.GetUserById(uId)
 	// 以第一张作为封面图
@@ -100,35 +94,29 @@ func (service *ProductService) Create(ctx context.Context, uId uint, files []*mu
 			Error:  err.Error(),
 		}
 	}
-
+	//协调并发
 	wg := new(sync.WaitGroup)
 	wg.Add(len(files))
 	for index, file := range files {
-		num := strconv.Itoa(index)
-		productImgDao := dao.NewProductImgDaoByDB(productDao.DB)
-		tmp, _ = file.Open()
-		path, err := UploadProductToLocalStatic(tmp, uId, service.Name+num)
-		if err != nil {
-			code = e.ErrorUploadFile
-			return serializer.Response{
-				Status: code,
-				Data:   e.GetMsg(code),
-				Error:  path,
+		go func() {
+			num := strconv.Itoa(index)
+			productImgDao := dao.NewProductImgDaoByDB(productDao.DB)
+			tmp, _ = file.Open()
+			path, err := UploadProductToLocalStatic(tmp, uId, service.Name+num)
+			if err != nil {
+				code = e.ErrorUploadFile
+				panic(err)
 			}
-		}
-		productImg := &model.ProductImg{
-			ProductID: product.ID,
-			ImgPath:   path,
-		}
-		err = productImgDao.CreateProductImg(productImg)
-		if err != nil {
-			code = e.Error
-			return serializer.Response{
-				Status: code,
-				Msg:    e.GetMsg(code),
-				Error:  err.Error(),
+			productImg := &model.ProductImg{
+				ProductID: product.ID,
+				ImgPath:   path,
 			}
-		}
+			err = productImgDao.CreateProductImg(productImg)
+			if err != nil {
+				code = e.Error
+				panic(err)
+			}
+		}()
 		wg.Done()
 	}
 
@@ -150,7 +138,7 @@ func (service *ProductService) List(ctx context.Context) serializer.Response {
 	if service.PageSize == 0 {
 		service.PageSize = 15
 	}
-	//找分类
+	//找某种分类商品还是说查找全部商品
 	condition := make(map[string]interface{})
 	if service.CategoryID != 0 {
 		condition["category_id"] = service.CategoryID
@@ -164,7 +152,7 @@ func (service *ProductService) List(ctx context.Context) serializer.Response {
 			Msg:    e.GetMsg(code),
 		}
 	}
-	//进行并发操作
+	//等待查询结束
 	wg := new(sync.WaitGroup)
 	wg.Add(1)
 	go func() {
@@ -231,15 +219,14 @@ func (service *ProductService) Update(ctx context.Context, pId string) serialize
 	}
 }
 
-// 搜索商品
+// Search 搜索商品
 func (service *ProductService) Search(ctx context.Context) serializer.Response {
 	code := e.Success
 	if service.PageSize == 0 {
 		service.PageSize = 15
 	}
-
 	productDao := dao.NewProductDao(ctx)
-	products, err := productDao.SearchProduct(service.Info, service.BasePage)
+	products, err := productDao.SearchProduct(service.Info, service.BasePage.PageNum, service.BasePage.PageSize)
 	if err != nil {
 		logging.Info(err)
 		code = e.Error

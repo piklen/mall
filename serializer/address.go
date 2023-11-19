@@ -12,7 +12,7 @@ type Address struct {
 	CreateAt int64  `json:"create_at"`
 }
 
-// 收货地址购物车
+// 收货地址
 func BuildAddress(item *model.Address) Address {
 	return Address{
 		ID:       item.ID,

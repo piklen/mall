@@ -1,8 +1,6 @@
 package v
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/cache"
 	"mall/service"
@@ -49,10 +47,8 @@ func GetProductView(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid product ID"})
 			return
 		}
-
 		product := &Product{ID: int(id)}
 		count := product.View()
-
 		c.JSON(http.StatusOK, gin.H{"product_id": product.ID, "view_count": count})
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
@@ -62,17 +58,6 @@ func GetProductView(c *gin.Context) {
 func AddProductView(c *gin.Context) {
 	var product = Product{}
 	if err := c.ShouldBind(&product); err == nil {
-
-		paramJSON, err := json.Marshal(c.Params)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert to JSON"})
-			return
-		}
-
-		// 打印JSON格式的参数
-		fmt.Println(string(paramJSON))
-		fmt.Println("---------------------------")
-
 		id, err := strconv.Atoi(strconv.Itoa(product.ID))
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid product ID"})
@@ -80,11 +65,8 @@ func AddProductView(c *gin.Context) {
 		}
 		product := &Product{ID: int(id)}
 		product.AddView()
-		c.JSON(http.StatusOK, gin.H{"message": "添加成功！！！"})
+		c.JSON(http.StatusOK, gin.H{"message": "浏览量添加成功！！！"})
 	} else {
 		c.JSON(http.StatusBadRequest, ErrorResponse(err))
 	}
-
-	//// 将参数转化为JSON格式
-
 }
