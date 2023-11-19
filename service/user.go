@@ -122,7 +122,7 @@ func (service *UserService) Login(ctx context.Context) serializer.Response {
 		return serializer.Response{
 			Status: code,
 			Msg:    e.GetMsg(code),
-			Data:   "Token验证失败!!",
+			Data:   "Token签发失败!!",
 		}
 	}
 	return serializer.Response{
@@ -162,8 +162,8 @@ func (service UserService) Update(ctx context.Context, uId uint) serializer.Resp
 	}
 }
 
-// Post 头像更新
-func (service *UserService) Post(ctx context.Context, uId uint, file multipart.File, fileSize int64) serializer.Response {
+// PostAvatar 头像更新
+func (service *UserService) PostAvatar(ctx context.Context, uId uint, file multipart.File, fileSize int64) serializer.Response {
 	code := e.Success
 	var user *model.User
 	var err error
@@ -180,7 +180,6 @@ func (service *UserService) Post(ctx context.Context, uId uint, file multipart.F
 	}
 	//保存图片到本地
 	path, err := UploadAvatarToLocalStatic(file, uId, user.UserName)
-
 	if err != nil {
 		code = e.ErrorUploadFile
 		return serializer.Response{
@@ -212,7 +211,6 @@ func (service *SendEmailService) Send(ctx context.Context, uId uint) serializer.
 	code := e.Success
 	var address string
 	var notice *model.Notice //绑定邮箱,修改密码都有模板通知
-
 	token, err := util.GenerateEmailToken(uId, service.OperationType, service.Email, service.Password)
 	if err != nil {
 		code = e.ErrorAuthToken
@@ -270,10 +268,13 @@ func (service ValidEmailService) Valid(ctx context.Context, token string) serial
 	} else {
 		claims, err := util.ParseEmailToken(token)
 		if err != nil {
+			//如果解析token错误就返回错误
 			code = e.ErrorAuthToken
 		} else if time.Now().Unix() > claims.ExpiresAt {
+			//如果超时就返回验证时间超时
 			code = e.ErrorAuthCheckTokenTimeout
 		} else {
+			//不然就是成功了，就直接构建用户结构体
 			userID = claims.UserID
 			email = claims.Email
 			password = claims.Password
@@ -349,16 +350,3 @@ func (service *ShowMoneyService) Show(ctx context.Context, uId uint) serializer.
 		Msg:    e.GetMsg(code),
 	}
 }
-
-//var UserSrvIns *UserSrv
-//var UserSrvOnce sync.Once
-//
-//type UserSrv struct {
-//}
-//
-//func GetUserSrv() *UserSrv {
-//	UserSrvOnce.Do(func() {
-//		UserSrvIns = &UserSrv{}
-//	})
-//	return UserSrvIns
-//}

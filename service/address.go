@@ -115,7 +115,6 @@ func (service *AddressService) Delete(ctx context.Context, aId string) serialize
 
 func (service *AddressService) Update(ctx context.Context, uid uint, aid string) serializer.Response {
 	code := e.Success
-
 	addressDao := dao.NewAddressDao(ctx)
 	address := &model.Address{
 		UserID:  uid,

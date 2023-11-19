@@ -56,10 +56,10 @@ func (dao *ProductDao) UpdateProduct(pId uint, product *model.Product) error {
 }
 
 // SearchProduct 搜索商品
-func (dao *ProductDao) SearchProduct(info string, page model.BasePage) (products []*model.Product, err error) {
+func (dao *ProductDao) SearchProduct(info string, pageNum int, pageSize int) (products []*model.Product, err error) {
 	err = dao.DB.Model(&model.Product{}).
 		Where("name LIKE ? OR info LIKE ?", "%"+info+"%", "%"+info+"%").
-		Offset((page.PageNum - 1) * page.PageSize).
-		Limit(page.PageSize).Find(&products).Error
+		Offset((pageNum - 1) * pageSize).
+		Limit(pageSize).Find(&products).Error
 	return
 }

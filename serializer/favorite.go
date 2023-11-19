@@ -35,9 +35,9 @@ func BuildFavorite(item1 *model.Favorite, item2 *model.Product, item3 *model.Use
 		ImgPath:       item2.ImgPath,
 		Price:         item2.Price,
 		DiscountPrice: item2.DiscountPrice,
-		BossID:        item3.ID,
 		Num:           item2.Num,
 		OnSale:        item2.OnSale,
+		BossID:        item3.ID,
 	}
 }
 
@@ -45,7 +45,6 @@ func BuildFavorite(item1 *model.Favorite, item2 *model.Product, item3 *model.Use
 func BuildFavorites(ctx context.Context, items []*model.Favorite) (favorites []Favorite) {
 	productDao := dao.NewProductDao(ctx)
 	bossDao := dao.NewUserDao(ctx)
-
 	for _, fav := range items {
 		product, err := productDao.GetProductById(fav.ProductId)
 		if err != nil {

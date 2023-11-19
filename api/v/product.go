@@ -1,7 +1,6 @@
 package v
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/pkg/log"
 	"mall/pkg/util"
@@ -11,12 +10,10 @@ import (
 
 // 创建商品
 func CreateProduct(c *gin.Context) {
-	fmt.Println("进入了Create Product...")
 	form, _ := c.MultipartForm()
 	files := form.File["file"]
 	claim, _ := util.ParseToken(c.GetHeader("Authorization"))
 	createProductService := service.ProductService{}
-	//c.SaveUploadedFile()
 	if err := c.ShouldBind(&createProductService); err == nil {
 		res := createProductService.Create(c.Request.Context(), claim.ID, files)
 		c.JSON(http.StatusOK, res)
@@ -26,7 +23,7 @@ func CreateProduct(c *gin.Context) {
 	}
 }
 
-// 商品列表
+// ListProducts 商品列表
 func ListProducts(c *gin.Context) {
 	listProductsService := service.ProductService{}
 	if err := c.ShouldBind(&listProductsService); err == nil {
@@ -38,7 +35,7 @@ func ListProducts(c *gin.Context) {
 	}
 }
 
-// 搜索商品
+// SearchProducts 搜索商品
 func SearchProducts(c *gin.Context) {
 	searchProductsService := service.ProductService{}
 	if err := c.ShouldBind(&searchProductsService); err == nil {
@@ -50,9 +47,13 @@ func SearchProducts(c *gin.Context) {
 	}
 }
 
-// 商品详情
 func ShowProduct(c *gin.Context) {
 	showProductService := service.ProductService{}
-	res := showProductService.Show(c.Request.Context(), c.Query("id"))
-	c.JSON(http.StatusOK, res)
+	if err := c.ShouldBind(&showProductService); err == nil {
+		res := showProductService.Show(c.Request.Context(), c.Query("id"))
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		log.LogrusObj.Infoln(err)
+	}
 }

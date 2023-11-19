@@ -1,7 +1,6 @@
 package v
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/pkg/log"
 	"mall/pkg/util"
@@ -22,7 +21,6 @@ func CreateFavorite(c *gin.Context) {
 }
 func ShowFavorites(c *gin.Context) {
 	service := service.FavoritesService{}
-	fmt.Println("---------标记--------")
 	claim, _ := util.ParseToken(c.GetHeader("Authorization"))
 	if err := c.ShouldBind(&service); err == nil {
 		res := service.Show(c.Request.Context(), claim.ID)

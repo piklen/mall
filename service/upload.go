@@ -1,7 +1,7 @@
 package service
 
 import (
-	"io/ioutil"
+	"io"
 	"mall/conf"
 	"mime/multipart"
 	"os"
@@ -16,11 +16,11 @@ func UploadProductToLocalStatic(file multipart.File, bossId uint, productName st
 		CreateDir(basePath)
 	}
 	productPath := basePath + productName + ".jpg"
-	content, err := ioutil.ReadAll(file)
+	content, err := io.ReadAll(file)
 	if err != nil {
 		return "", err
 	}
-	err = ioutil.WriteFile(productPath, content, 0666)
+	err = os.WriteFile(productPath, content, 0666)
 	if err != nil {
 		return "", err
 	}
@@ -35,11 +35,11 @@ func UploadAvatarToLocalStatic(file multipart.File, userId uint, userName string
 		CreateDir(basePath)
 	}
 	avatarPath := basePath + userName + ".jpg"
-	content, err := ioutil.ReadAll(file)
+	content, err := io.ReadAll(file)
 	if err != nil {
 		return "", err
 	}
-	err = ioutil.WriteFile(avatarPath, content, 0666)
+	err = os.WriteFile(avatarPath, content, 0666)
 	if err != nil {
 		return "", err
 	}
