@@ -40,3 +40,25 @@ func SkillGoods(c *gin.Context) {
 		log.LogrusObj.Infoln(err, "SkillGoods")
 	}
 }
+func SkillGoodsWithMySQL(c *gin.Context) {
+	var skillGoods service.SeckillGoodsWithMySQL
+	claim, _ := util.ParseToken(c.GetHeader("Authorization"))
+	if err := c.ShouldBind(&skillGoods); err == nil {
+		res := skillGoods.SkillGoodsWithMySQL(c.Request.Context(), claim.ID)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		log.LogrusObj.Infoln(err, "SkillGoodsWithMySQL")
+	}
+}
+func SkillGoodsWithRedis(c *gin.Context) {
+	var skillGoods service.SeckillGoods
+	claim, _ := util.ParseToken(c.GetHeader("Authorization"))
+	if err := c.ShouldBind(&skillGoods); err == nil {
+		res := skillGoods.SkillGoodsWithRedis(c.Request.Context(), claim.ID)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusBadRequest, ErrorResponse(err))
+		log.LogrusObj.Infoln(err, "SkillGoodsWithMySQL")
+	}
+}

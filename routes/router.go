@@ -78,6 +78,8 @@ func NewRouter() *gin.Engine {
 			authed.POST("import_skill_goods", api.ImportSkillGoods) //导入商品内容进去MySQL
 			authed.POST("init_skill_goods", api.InitSkillGoods)
 			authed.POST("skill_goods", api.SkillGoods)
+			authed.POST("skill_goods/mysql", api.SkillGoodsWithMySQL)
+			authed.POST("skill_goods/redis", api.SkillGoodsWithRedis)
 		}
 	}
 	return r

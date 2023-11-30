@@ -19,3 +19,11 @@ type SeckillGoods struct {
 	CustomId   uint
 	CustomName string
 }
+type SeckillGoodsWithMySQL struct {
+	Id         uint `gorm:"primarykey"`
+	ProductId  uint `json:"product_id"`
+	AddressId  uint `json:"address_id"`
+	Num        int  `gorm:"not null" json:"num"`
+	CustomId   uint
+	CustomName string
+}

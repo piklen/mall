@@ -79,7 +79,7 @@ func (service *OrderService) Create(ctx context.Context, id uint) serializer.Res
 		Score:  float64(time.Now().Unix()) + 15*time.Minute.Seconds(),
 		Member: orderNum,
 	}
-	cache.RedisClient.ZAdd(OrderTimeKey, data)
+	cache.RedisClient.Client.ZAdd(OrderTimeKey, data)
 	return serializer.Response{
 		Status: code,
 		Msg:    e.GetMsg(code),

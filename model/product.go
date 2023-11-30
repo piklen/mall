@@ -25,7 +25,7 @@ type Product struct {
 
 // View 获取点击数
 func (product *Product) View() uint64 {
-	countStr, _ := cache.RedisClient.Get(cache.ProductViewKey(product.ID)).Result()
+	countStr, _ := cache.RedisClient.Client.Get(cache.ProductViewKey(product.ID)).Result()
 	count, _ := strconv.ParseUint(countStr, 10, 64)
 	return count
 }
@@ -33,7 +33,7 @@ func (product *Product) View() uint64 {
 // AddView 商品游览
 func (product *Product) AddView() {
 	// 增加商品点击数
-	cache.RedisClient.Incr(cache.ProductViewKey(product.ID))
+	cache.RedisClient.Client.Incr(cache.ProductViewKey(product.ID))
 	// 增加排行点击数
-	cache.RedisClient.ZIncrBy(cache.RankKey, 1, strconv.Itoa(int(product.ID)))
+	cache.RedisClient.Client.ZIncrBy(cache.RankKey, 1, strconv.Itoa(int(product.ID)))
 }
